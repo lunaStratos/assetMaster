@@ -6,11 +6,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class LoginRequest {
+public class VehicleRequest {
 
     @NotBlank
-    private String loginId;
+    private String licensePlate;
 
-    @NotBlank
-    private String password;
+    private String vehicleType;
+    private String description;
 }

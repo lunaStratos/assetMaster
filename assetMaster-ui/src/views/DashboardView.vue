@@ -5,7 +5,7 @@ import {
   NLayout, NLayoutHeader, NLayoutContent,
   NCard, NButton, NSpace, NGrid, NGi, NTag, NDrawer, NDrawerContent,
   NForm, NFormItem, NInput, NInputNumber, NDatePicker, NSelect, NUpload,
-  NDivider, NDescriptions, NDescriptionsItem,
+  NDivider, NPopconfirm,
   useMessage,
 } from 'naive-ui'
 import type { UploadFileInfo } from 'naive-ui'
@@ -34,10 +34,19 @@ interface Room {
   leaseFilePath: string | null
 }
 
+interface Vehicle {
+  id: number
+  roomId: number
+  licensePlate: string
+  vehicleType: string | null
+  description: string | null
+}
+
 interface Building {
   id: number
   buildingName: string
   address: string
+  parkingAvailable: boolean
 }
 
 const building = ref<Building | null>(null)
@@ -47,6 +56,8 @@ const drawerVisible = ref(false)
 const selectedRoom = ref<Room | null>(null)
 const editForm = ref<any>({})
 const saving = ref(false)
+const vehicles = ref<Vehicle[]>([])
+const newVehicle = ref({ licensePlate: '', vehicleType: '', description: '' })
 
 const statusOptions = [
   { label: '공실', value: 'VACANT' },
@@ -81,7 +92,7 @@ function statusLabel(status: string) {
   }
 }
 
-function openDrawer(room: Room) {
+async function openDrawer(room: Room) {
   selectedRoom.value = room
   editForm.value = {
     roomNumber: room.roomNumber,
@@ -96,7 +107,46 @@ function openDrawer(room: Room) {
     endDate: room.endDate ? new Date(room.endDate).getTime() : null,
     description: room.description || '',
   }
+  newVehicle.value = { licensePlate: '', vehicleType: '', description: '' }
+  if (building.value?.parkingAvailable) {
+    try {
+      const res = await api.get(`/vehicles/room/${room.id}`)
+      vehicles.value = res.data.data
+    } catch {
+      vehicles.value = []
+    }
+  }
   drawerVisible.value = true
+}
+
+async function addVehicle() {
+  if (!selectedRoom.value) return
+  if (!newVehicle.value.licensePlate.trim()) {
+    message.warning('차량번호를 입력해주세요.')
+    return
+  }
+  try {
+    await api.post(`/vehicles/room/${selectedRoom.value.id}`, newVehicle.value)
+    message.success('차량이 등록되었습니다.')
+    newVehicle.value = { licensePlate: '', vehicleType: '', description: '' }
+    const res = await api.get(`/vehicles/room/${selectedRoom.value.id}`)
+    vehicles.value = res.data.data
+  } catch {
+    message.error('차량 등록에 실패했습니다.')
+  }
+}
+
+async function deleteVehicle(vehicleId: number) {
+  try {
+    await api.delete(`/vehicles/${vehicleId}`)
+    message.success('차량이 삭제되었습니다.')
+    if (selectedRoom.value) {
+      const res = await api.get(`/vehicles/room/${selectedRoom.value.id}`)
+      vehicles.value = res.data.data
+    }
+  } catch {
+    message.error('차량 삭제에 실패했습니다.')
+  }
 }
 
 async function fetchData() {
@@ -234,6 +284,29 @@ onMounted(fetchData)
           <div v-if="selectedRoom?.leaseFilePath" style="margin-bottom: 16px; color: #18a058">
             현재 파일: {{ selectedRoom.leaseFilePath }}
           </div>
+          <template v-if="building?.parkingAvailable">
+            <NDivider>차량 정보</NDivider>
+            <div v-for="v in vehicles" :key="v.id" style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px; padding: 8px; background: #f5f5f5; border-radius: 6px">
+              <div style="flex: 1">
+                <div style="font-weight: bold">{{ v.licensePlate }}</div>
+                <div v-if="v.vehicleType" style="font-size: 12px; color: #666">{{ v.vehicleType }}</div>
+              </div>
+              <NPopconfirm @positive-click="deleteVehicle(v.id)">
+                <template #trigger>
+                  <NButton size="tiny" type="error" quaternary>삭제</NButton>
+                </template>
+                이 차량을 삭제하시겠습니까?
+              </NPopconfirm>
+            </div>
+            <div v-if="vehicles.length === 0" style="color: #999; font-size: 13px; margin-bottom: 8px">
+              등록된 차량이 없습니다.
+            </div>
+            <div style="display: flex; gap: 8px; margin-top: 8px">
+              <NInput v-model:value="newVehicle.licensePlate" placeholder="차량번호" size="small" style="flex: 1" />
+              <NInput v-model:value="newVehicle.vehicleType" placeholder="차종 (선택)" size="small" style="flex: 1" />
+              <NButton size="small" type="primary" @click="addVehicle">추가</NButton>
+            </div>
+          </template>
         </NForm>
         <template #footer>
           <NSpace justify="end">

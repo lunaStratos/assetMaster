@@ -37,6 +37,7 @@ public class BuildingService {
         building.setAdminPhone(request.getAdminPhone());
         building.setDescription(request.getDescription());
         building.setPhone(request.getPhone());
+        building.setParkingAvailable(request.getParkingAvailable() != null && request.getParkingAvailable());
 
         try {
             building.setStructure(objectMapper.writeValueAsString(request.getFloors()));
@@ -80,6 +81,7 @@ public class BuildingService {
             building.setAdminPhone(request.getAdminPhone());
             building.setDescription(request.getDescription());
             building.setPhone(request.getPhone());
+            building.setParkingAvailable(request.getParkingAvailable() != null && request.getParkingAvailable());
             try {
                 building.setStructure(objectMapper.writeValueAsString(request.getFloors()));
             } catch (JsonProcessingException e) {

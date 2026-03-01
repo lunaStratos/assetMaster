@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import {
   NLayout, NLayoutHeader, NLayoutContent,
-  NCard, NForm, NFormItem, NInput, NButton, NSpace, NPopconfirm,
+  NCard, NForm, NFormItem, NInput, NButton, NSpace, NPopconfirm, NSwitch,
   useMessage,
 } from 'naive-ui'
 import api from '@/api/axios'
@@ -21,6 +21,7 @@ const form = ref({
   adminPhone: '',
   description: '',
   phone: '',
+  parkingAvailable: false,
 })
 
 async function fetchBuilding() {
@@ -34,6 +35,7 @@ async function fetchBuilding() {
       adminPhone: b.adminPhone || '',
       description: b.description || '',
       phone: b.phone || '',
+      parkingAvailable: b.parkingAvailable || false,
     }
   } catch {
     message.error('건물 정보를 불러오는데 실패했습니다.')
@@ -98,6 +100,12 @@ onMounted(fetchBuilding)
           </NFormItem>
           <NFormItem label="설명">
             <NInput v-model:value="form.description" type="textarea" placeholder="건물 설명" />
+          </NFormItem>
+          <NFormItem label="주차장 여부">
+            <NSwitch v-model:value="form.parkingAvailable">
+              <template #checked>있음</template>
+              <template #unchecked>없음</template>
+            </NSwitch>
           </NFormItem>
         </NForm>
         <NSpace justify="space-between" style="margin-top: 24px">

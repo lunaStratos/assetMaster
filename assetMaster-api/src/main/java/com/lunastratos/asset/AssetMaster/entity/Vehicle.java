@@ -11,30 +11,24 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "u_am_member")
-public class Member {
+@Table(name = "u_am_vehicle")
+public class Vehicle {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "login_id", nullable = false, unique = true, length = 50)
-    private String loginId;
+    @Column(name = "room_id", nullable = false)
+    private Long roomId;
 
-    @Column(name = "password", nullable = false, length = 256)
-    private String password;
+    @Column(name = "license_plate", nullable = false, length = 30)
+    private String licensePlate;
 
-    @Column(name = "name", nullable = false, length = 50)
-    private String name;
+    @Column(name = "vehicle_type", length = 50)
+    private String vehicleType;
 
-    @Column(name = "phone", nullable = false, length = 20)
-    private String phone;
-
-    @Column(name = "active_yn", nullable = false, length = 1)
-    private String activeYn = "Y";
-
-    @Column(name = "refresh_token", length = 512)
-    private String refreshToken;
+    @Column(name = "description", length = 200)
+    private String description;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;

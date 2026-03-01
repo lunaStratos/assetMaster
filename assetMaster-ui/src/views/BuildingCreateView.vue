@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import {
   NLayout, NLayoutHeader, NLayoutContent,
-  NCard, NForm, NFormItem, NInput, NInputNumber, NButton, NSpace, NDynamicInput,
+  NCard, NForm, NFormItem, NInput, NInputNumber, NButton, NSpace, NDynamicInput, NSwitch,
   useMessage,
 } from 'naive-ui'
 import api from '@/api/axios'
@@ -19,6 +19,7 @@ const form = ref({
   adminPhone: '',
   description: '',
   phone: '',
+  parkingAvailable: false,
 })
 
 const floors = ref<Array<{ floor: number; roomCount: number }>>([
@@ -87,6 +88,12 @@ async function handleCreate() {
           </NFormItem>
           <NFormItem label="설명">
             <NInput v-model:value="form.description" type="textarea" placeholder="건물 설명" />
+          </NFormItem>
+          <NFormItem label="주차장 여부">
+            <NSwitch v-model:value="form.parkingAvailable">
+              <template #checked>있음</template>
+              <template #unchecked>없음</template>
+            </NSwitch>
           </NFormItem>
         </NForm>
 

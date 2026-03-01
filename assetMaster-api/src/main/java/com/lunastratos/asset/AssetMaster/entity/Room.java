@@ -1,10 +1,17 @@
 package com.lunastratos.asset.AssetMaster.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "u_am_room")
 public class Room {
@@ -72,52 +79,4 @@ public class Room {
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public Long getBuildingId() { return buildingId; }
-    public void setBuildingId(Long buildingId) { this.buildingId = buildingId; }
-
-    public Integer getFloor() { return floor; }
-    public void setFloor(Integer floor) { this.floor = floor; }
-
-    public String getRoomNumber() { return roomNumber; }
-    public void setRoomNumber(String roomNumber) { this.roomNumber = roomNumber; }
-
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
-
-    public String getTenantName() { return tenantName; }
-    public void setTenantName(String tenantName) { this.tenantName = tenantName; }
-
-    public String getTenantPhone() { return tenantPhone; }
-    public void setTenantPhone(String tenantPhone) { this.tenantPhone = tenantPhone; }
-
-    public String getCountry() { return country; }
-    public void setCountry(String country) { this.country = country; }
-
-    public BigDecimal getDeposit() { return deposit; }
-    public void setDeposit(BigDecimal deposit) { this.deposit = deposit; }
-
-    public BigDecimal getMonthlyRent() { return monthlyRent; }
-    public void setMonthlyRent(BigDecimal monthlyRent) { this.monthlyRent = monthlyRent; }
-
-    public String getAccountNumber() { return accountNumber; }
-    public void setAccountNumber(String accountNumber) { this.accountNumber = accountNumber; }
-
-    public LocalDate getStartDate() { return startDate; }
-    public void setStartDate(LocalDate startDate) { this.startDate = startDate; }
-
-    public LocalDate getEndDate() { return endDate; }
-    public void setEndDate(LocalDate endDate) { this.endDate = endDate; }
-
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
-
-    public String getLeaseFilePath() { return leaseFilePath; }
-    public void setLeaseFilePath(String leaseFilePath) { this.leaseFilePath = leaseFilePath; }
-
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
 }

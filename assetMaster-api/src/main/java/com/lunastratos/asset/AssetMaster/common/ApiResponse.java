@@ -1,7 +1,9 @@
 package com.lunastratos.asset.AssetMaster.common;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Getter;
 
+@Getter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiResponse<T> {
 
@@ -26,8 +28,4 @@ public class ApiResponse<T> {
     public static <T> ApiResponse<T> error(int status, String message) {
         return new ApiResponse<>(status, message, null);
     }
-
-    public int getStatus() { return status; }
-    public String getMessage() { return message; }
-    public T getData() { return data; }
 }

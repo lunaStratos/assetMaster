@@ -1,8 +1,15 @@
 package com.lunastratos.asset.AssetMaster.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "u_am_building")
 public class Building {
@@ -32,6 +39,9 @@ public class Building {
     @Column(name = "phone", length = 20)
     private String phone;
 
+    @Column(name = "parking_available", nullable = false, columnDefinition = "TINYINT(1) DEFAULT 0")
+    private Boolean parkingAvailable = false;
+
     @Column(name = "structure", columnDefinition = "JSON")
     private String structure;
 
@@ -51,34 +61,4 @@ public class Building {
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public Long getMemberId() { return memberId; }
-    public void setMemberId(Long memberId) { this.memberId = memberId; }
-
-    public String getBuildingName() { return buildingName; }
-    public void setBuildingName(String buildingName) { this.buildingName = buildingName; }
-
-    public String getAddress() { return address; }
-    public void setAddress(String address) { this.address = address; }
-
-    public String getAdminName() { return adminName; }
-    public void setAdminName(String adminName) { this.adminName = adminName; }
-
-    public String getAdminPhone() { return adminPhone; }
-    public void setAdminPhone(String adminPhone) { this.adminPhone = adminPhone; }
-
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
-
-    public String getPhone() { return phone; }
-    public void setPhone(String phone) { this.phone = phone; }
-
-    public String getStructure() { return structure; }
-    public void setStructure(String structure) { this.structure = structure; }
-
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
 }
