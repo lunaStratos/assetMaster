@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: AssetMaster
+
+  datasource:
+    url: jdbc:mariadb://localhost:3306/assetmaster?useUnicode=true&characterEncoding=utf8mb4
+    username: root
+    password: root
+    driver-class-name: org.mariadb.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MariaDBDialect
+        format_sql: true
+    show-sql: true
+
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+
+server:
+  port: 8080
+
+jwt:
+  secret: AssetMasterSecretKeyForJwtTokenGenerationMustBeLongEnough256bits!!
+  access-token-expiration: 3600000
+  refresh-token-expiration: 604800000
+
+file:
+  upload-dir: ./uploads
