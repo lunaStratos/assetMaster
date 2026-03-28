@@ -198,6 +198,22 @@ async function handleUpload({ file }: { file: UploadFileInfo }) {
   }
 }
 
+async function downloadExcel() {
+  try {
+    const res = await api.get(`/rooms/building/${buildingId}/excel`, { responseType: 'blob' })
+    const url = window.URL.createObjectURL(new Blob([res.data]))
+    const link = document.createElement('a')
+    link.href = url
+    link.setAttribute('download', `${building.value?.buildingName || '건물'}_방현황.xlsx`)
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    window.URL.revokeObjectURL(url)
+  } catch {
+    message.error('엑셀 다운로드에 실패했습니다.')
+  }
+}
+
 onMounted(fetchData)
 </script>
 
@@ -205,7 +221,8 @@ onMounted(fetchData)
   <NLayout>
     <NLayoutHeader bordered style="padding: 12px 24px; display: flex; align-items: center; gap: 16px">
       <NButton @click="router.push(`/building/${buildingId}`)">← 메뉴</NButton>
-      <h2 style="margin: 0">{{ building?.buildingName || '...' }} - 방 관리</h2>
+      <h2 style="margin: 0; flex: 1">{{ building?.buildingName || '...' }} - 방 관리</h2>
+      <NButton type="primary" @click="downloadExcel">엑셀 다운로드</NButton>
     </NLayoutHeader>
     <NLayoutContent style="padding: 24px">
       <div v-for="fg in floorGroups" :key="fg.floor" style="margin-bottom: 24px">

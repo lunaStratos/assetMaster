@@ -5,6 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "backend": "cd ../assetMaster-api && gradlew.bat bootRun",
+    "start:frontend": "npm run dev",
+    "start:backend": "npm run backend",
+    "start:all": "run-p start:frontend start:backend",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",
